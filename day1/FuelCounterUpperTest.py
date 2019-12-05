@@ -13,11 +13,11 @@ class FuelCounterUpperTestCase(unittest.TestCase):
 
     def test_largeNumber(self):
         fuel_counter = FuelCounterUpper()
-        self.assertEqual(654, fuel_counter.calculate(mass=1969))
+        self.assertEqual(966, fuel_counter.calculate(mass=1969))
 
     def test_largerNumber(self):
         fuel_counter = FuelCounterUpper()
-        self.assertEqual(33583, fuel_counter.calculate(mass=100756))
+        self.assertEqual(50346, fuel_counter.calculate(mass=100756))
 
     def test_calculateList(self):
         fuel_counter = FuelCounterUpper()
