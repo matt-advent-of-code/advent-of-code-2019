@@ -1,3 +1,5 @@
+import sys
+
 class Intcode:
     END_OPERATOR = 99
 
@@ -29,10 +31,14 @@ class Intcode:
             return first * second
 
 if __name__ == '__main__':
-    f = open("input.txt")
-    state = [ int(pos) for pos in f.readline().split(",")]
-    state[1] = 12
-    state[2] = 2
-    state = Intcode.program(state)
-    print state
-    print state[0]
+    for noun in range(0, 99):
+        for verb in range(0, 99):
+            f = open("input.txt")
+            state = [ int(pos) for pos in f.readline().split(",")]
+            f.close()
+            state[1] = noun
+            state[2] = verb
+            state = Intcode.program(state)
+            if state[0] == 19690720:
+                print 100 * noun + verb
+                sys.exit()
