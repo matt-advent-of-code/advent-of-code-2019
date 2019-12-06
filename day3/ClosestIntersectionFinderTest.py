@@ -14,7 +14,7 @@ class MyTestCase(unittest.TestCase):
 
     def test_draw_wire1_right(self):
         expected_wire1= [[0, 0, 0, 0],
-                         [0, 1, 1, 0],
+                         [0, 1, 2, 0],
                          [0, 0, 0, 0],
                          [0, 0, 0, 0]]
 
@@ -30,7 +30,7 @@ class MyTestCase(unittest.TestCase):
 
     def test_draw_wire2_right(self):
         expected_wire2= [[0, 0, 0, 0],
-                         [0, 1, 1, 0],
+                         [0, 1, 2, 0],
                          [0, 0, 0, 0],
                          [0, 0, 0, 0]]
 
@@ -46,7 +46,7 @@ class MyTestCase(unittest.TestCase):
 
     def test_draw_wire1_left(self):
         expected_wire1= [[0, 0, 0, 0],
-                         [0, 1, 1, 0],
+                         [0, 2, 1, 0],
                          [0, 0, 0, 0],
                          [0, 0, 0, 0]]
 
@@ -63,7 +63,7 @@ class MyTestCase(unittest.TestCase):
 
     def test_draw_wire2_left(self):
         expected_wire2= [[0, 0, 0, 0],
-                         [0, 1, 1, 0],
+                         [0, 2, 1, 0],
                          [0, 0, 0, 0],
                          [0, 0, 0, 0]]
 
@@ -79,7 +79,7 @@ class MyTestCase(unittest.TestCase):
 
     def test_draw_wire1_up(self):
         expected_wire1= [[0, 0, 0, 0],
-                         [1, 0, 0, 0],
+                         [2, 0, 0, 0],
                          [1, 0, 0, 0],
                          [0, 0, 0, 0]]
 
@@ -95,7 +95,7 @@ class MyTestCase(unittest.TestCase):
 
     def test_draw_wire2_up(self):
         expected_wire2= [[0, 0, 0, 0],
-                         [1, 0, 0, 0],
+                         [2, 0, 0, 0],
                          [1, 0, 0, 0],
                          [0, 0, 0, 0]]
 
@@ -112,7 +112,7 @@ class MyTestCase(unittest.TestCase):
     def test_draw_wire1_down(self):
         expected_wire1 = [[0, 0, 0, 0],
                           [1, 0, 0, 0],
-                          [1, 0, 0, 0],
+                          [2, 0, 0, 0],
                           [0, 0, 0, 0]]
 
         expected_wire2 = [[0, 0, 0, 0],
@@ -128,7 +128,7 @@ class MyTestCase(unittest.TestCase):
     def test_draw_wire2_down(self):
         expected_wire2 = [[0, 0, 0, 0],
                           [1, 0, 0, 0],
-                          [1, 0, 0, 0],
+                          [2, 0, 0, 0],
                           [0, 0, 0, 0]]
 
         expected_wire1 = [[0, 0, 0, 0],
@@ -144,7 +144,7 @@ class MyTestCase(unittest.TestCase):
     def test_draw_multi(self):
         expected_wire1 = [[0, 0, 0, 0],
                           [1, 0, 0, 0],
-                          [1, 1, 1, 0],
+                          [2, 3, 4, 0],
                           [0, 0, 0, 0]]
 
         intersection_finder = ClosestIntersectionFinder(4, 4, (0, 0))
@@ -179,7 +179,7 @@ class MyTestCase(unittest.TestCase):
         intersection_finder = ClosestIntersectionFinder(1000, 1000, (8, 1))
         intersection_finder.draw_wire1(["R75", "D30", "R83", "U83", "L12", "D49", "R71", "U7", "L72"])
         intersection_finder.draw_wire2(["U62", "R66", "U55", "R34", "D71", "R55", "D58", "R83"])
-        expected_distance = 159
+        expected_distance = 610
         distance = intersection_finder.calculate_shortest_distance()
         self.assertEqual(expected_distance, distance)
 
@@ -187,7 +187,7 @@ class MyTestCase(unittest.TestCase):
         intersection_finder = ClosestIntersectionFinder(1000, 1000, (500, 500))
         intersection_finder.draw_wire1(["R98", "U47", "R26", "D63", "R33", "U87", "L62", "D20", "R33", "U53", "R51"])
         intersection_finder.draw_wire2(["U98", "R91", "D20", "R16", "D67", "R40", "U7", "R15", "U6", "R7"])
-        expected_distance = 135
+        expected_distance = 410
         distance = intersection_finder.calculate_shortest_distance()
         self.assertEqual(expected_distance, distance)
 

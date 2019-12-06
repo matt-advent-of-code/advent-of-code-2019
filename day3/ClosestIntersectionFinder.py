@@ -17,7 +17,7 @@ class ClosestIntersectionFinder:
     def calculate_intersections(self):
         for i in range(0, len(self.wire1)):
             for j in range(0, len(self.wire1[i])):
-                if self.wire1[i][j] == 1 and self.wire2[i][j] == 1:
+                if self.wire1[i][j] > 0 and self.wire2[i][j] > 0:
                     self.intersections.append((i, j))
 
     def calculate_manhattan_distance(self, index1, index2):
@@ -25,15 +25,17 @@ class ClosestIntersectionFinder:
 
     def calculate_shortest_distance(self):
         self.calculate_intersections()
-        shortest_intersection = self.calculate_manhattan_distance(self.central_port, self.intersections[0])
+        intersection = self.intersections[0]
+        shortest_intersection = self.wire1[intersection[0]][intersection[1]] + self.wire2[intersection[0]][intersection[1]]
         for intersection in self.intersections:
-            distance = self.calculate_manhattan_distance(self.central_port, intersection)
+            distance = self.wire1[intersection[0]][intersection[1]] + self.wire2[intersection[0]][intersection[1]]
             if distance < shortest_intersection:
                 shortest_intersection = distance
         return shortest_intersection
 
     def __draw_wire(self, wire, path):
         index = self.central_port
+        distanced_travled = 0
         for operation in path:
             direction = operation[0]
             length = int(operation[1:])
@@ -46,7 +48,8 @@ class ClosestIntersectionFinder:
                     index = (index[0]+1, index[1])
                 else:
                     index = (index[0], index[1] - 1)
-                wire[index[0]][index[1]] = 1
+                distanced_travled += 1
+                wire[index[0]][index[1]] = distanced_travled
 
 
 if __name__ == '__main__':
