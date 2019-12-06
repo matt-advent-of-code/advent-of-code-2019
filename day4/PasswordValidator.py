@@ -1,3 +1,5 @@
+import re
+
 class PasswordValidator:
     @staticmethod
     def is_valid_password(password):
@@ -6,10 +8,11 @@ class PasswordValidator:
     @staticmethod
     def __contains_adjacent_repeating_digets(password):
         password_as_string = str(password)
-        for i in range(0, len(password_as_string) - 1):
-            if password_as_string[i] == password_as_string[i+1]:
+        for char in password_as_string:
+            if re.search(char+"{2}", password_as_string) and not re.search(char+"{3}", password_as_string):
                 return True
         return False
+
 
     @staticmethod
     def __is_increasing(password):

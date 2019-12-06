@@ -5,8 +5,8 @@ from PasswordValidator import PasswordValidator
 
 class MyTestCase(unittest.TestCase):
     def test_valid(self):
-        self.assertTrue(PasswordValidator.is_valid_password(111111))
-        self.assertTrue(PasswordValidator.is_valid_password(111123))
+        self.assertTrue(PasswordValidator.is_valid_password(112233))
+        self.assertTrue(PasswordValidator.is_valid_password(111122))
 
 
     def test_less_than_six_digits(self):
@@ -18,6 +18,9 @@ class MyTestCase(unittest.TestCase):
 
     def test_decreases(self):
         self.assertFalse(PasswordValidator.is_valid_password(223450))
+
+    def test_too_many_repeats(self):
+        self.assertFalse(PasswordValidator.is_valid_password(123444))
 
 
 if __name__ == '__main__':
