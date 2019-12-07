@@ -4,6 +4,10 @@ class Intcode:
     INPUT_OPERATOR = 3
     OUTPUT_OPERATOR = 4
     MULTIPLY_OPERATOR = 2
+    JUMP_IF_TRUE_OPERATOR = 5
+    JUMP_IF_FALSE_OPERATOR = 6
+    LESS_THAN_OPERATOR = 7
+    EQUAL_OPERATOR = 8
 
     def __init__(self):
         pass
@@ -33,6 +37,15 @@ class Intcode:
             return OutputInstruction()
         elif i == Intcode.MULTIPLY_OPERATOR:
             return MultiplyInstruction()
+        elif i == Intcode.JUMP_IF_TRUE_OPERATOR:
+            return JumpIfTrueInstruction()
+        elif i == Intcode.JUMP_IF_FALSE_OPERATOR:
+            return JumpIfFalseInstruction()
+        elif i == Intcode.LESS_THAN_OPERATOR:
+            return LessThanInstruction()
+        elif i == Intcode.EQUAL_OPERATOR:
+            return EqualInstruction()
+
 class Parameter:
     def __init__(self, value, mode="position"):
         self.value = value
@@ -82,7 +95,7 @@ class MultiplyInstruction(AddInstruction):
 class InputInstruction(Instruction):
     def operate(self, program, index):
         param = program[index+1]
-        program[param] = 1 # hard coded as one
+        program[param] = 5 # hard coded as one
         return index + 2
 
 class OutputInstruction(Instruction):
@@ -94,6 +107,42 @@ class OutputInstruction(Instruction):
     def print_out(self, param, program, index):
         if param.mode == "immediate":
             print param
+
+class JumpIfTrueInstruction(Instruction):
+    def operate(self, program, index):
+        first, second = self.get_parameters(program, index)
+        first_value = self.get_parameter_value(first, program)
+        second_value = self.get_parameter_value(second, program)
+        if self.should_jump(first_value):
+            return second_value
+        else:
+            return index + 3
+
+    def should_jump(self, value):
+        return value != 0
+
+
+class JumpIfFalseInstruction(JumpIfTrueInstruction):
+    def should_jump(self, value):
+        return value == 0
+
+class LessThanInstruction(Instruction):
+    def operate(self, program, index):
+        first, second = self.get_parameters(program, index)
+        first_value = self.get_parameter_value(first, program)
+        second_value = self.get_parameter_value(second, program)
+        if self.is_true(first_value, second_value):
+            program[program[index+3]] = 1
+        else:
+            program[program[index+3]] = 0
+        return index + 4
+
+    def is_true(self, first, second):
+        return first < second
+
+class EqualInstruction(LessThanInstruction):
+    def is_true(self, first, second):
+        return first == second
 
 
 if __name__ == '__main__':

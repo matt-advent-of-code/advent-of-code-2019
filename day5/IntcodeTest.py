@@ -1,6 +1,4 @@
 import unittest
-import sys
-from StringIO import StringIO
 
 from Intcode import Intcode
 
@@ -57,6 +55,33 @@ class MyTestCase(unittest.TestCase):
         inital_state = [104, 0, 99]
         self.intcode.program(inital_state)
 
+    def test_jump_if_true(self):
+        inital_state = [5, 0, 0, 4, 0, 99]
+        self.intcode.program(inital_state)
+
+    def test_jump_if_false(self):
+        inital_state = [6, 4, 5, 4, 0, 6, 99]
+        self.intcode.program(inital_state)
+
+    def test_less_than(self):
+        inital_state = [7, 5, 6, 0, 99, 6, 99]
+        expected = [1, 5, 6, 0, 99, 6, 99]
+        self.assertEqual(expected, self.intcode.program(inital_state))
+
+    def test_not_less_than(self):
+        inital_state = [7, 5, 6, 0, 99, 100, 99]
+        expected = [0, 5, 6, 0, 99, 100, 99]
+        self.assertEqual(expected, self.intcode.program(inital_state))
+
+    def test_equal(self):
+        inital_state = [8, 5, 6, 0, 99, 99, 99]
+        expected = [1, 5, 6, 0, 99, 99, 99]
+        self.assertEqual(expected, self.intcode.program(inital_state))
+
+    def test_not_equal(self):
+        inital_state = [8, 5, 6, 0, 99, 99, 98]
+        expected = [0, 5, 6, 0, 99, 99, 98]
+        self.assertEqual(expected, self.intcode.program(inital_state))
 
 
 if __name__ == '__main__':
