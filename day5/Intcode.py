@@ -24,17 +24,15 @@ class Intcode:
         return self.build_instruction(instruction).operate(state, index)
 
     def build_instruction(self, instruction):
-        if instruction == Intcode.ADD_OPERATOR:
+        i = int(str(instruction)[-1])
+        if i == Intcode.ADD_OPERATOR:
             return AddInstruction()
-        elif instruction == Intcode.INPUT_OPERATOR:
+        elif i == Intcode.INPUT_OPERATOR:
             return InputInstruction()
-        elif instruction == Intcode.OUTPUT_OPERATOR:
+        elif i == Intcode.OUTPUT_OPERATOR:
             return OutputInstruction()
-        elif instruction == Intcode.MULTIPLY_OPERATOR:
+        elif i == Intcode.MULTIPLY_OPERATOR:
             return MultiplyInstruction()
-        else:
-            return ParameterInstruction()
-
 class Parameter:
     def __init__(self, value, mode="position"):
         self.value = value
@@ -50,6 +48,19 @@ class Instruction:
         else:
             return parameter.value
 
+    def get_parameters(self, program, index):
+        instruction = str(program[index]).zfill(5)
+        mode = "position"
+        if instruction[2] == "1":
+            mode = "immediate"
+        first = Parameter(program[index + 1], mode)
+        mode = "position"
+        if instruction[1] == "1":
+            mode = "immediate"
+        second = Parameter(program[index + 2], mode)
+        return first, second
+
+
 class AddInstruction(Instruction):
     def operate(self, program, index):
         first,second = self.get_parameters(program, index)
@@ -64,11 +75,6 @@ class AddInstruction(Instruction):
     def calculate(self, first, second):
         return first + second
 
-    def get_parameters(self, program, index):
-        first = Parameter(program[index + 1])
-        second = Parameter(program[index + 2])
-        return first, second
-
 class MultiplyInstruction(AddInstruction):
     def calculate(self, first, second):
         return first * second
@@ -82,62 +88,12 @@ class InputInstruction(Instruction):
 class OutputInstruction(Instruction):
     def operate(self, program, index):
         param = self.get_parameters(program, index)
-        print self.get_parameter_value(param, program)
+        print self.get_parameter_value(param[0], program)
         return index + 2
-
-    def get_parameters(self, program, index):
-        return Parameter(program[index+1])
 
     def print_out(self, param, program, index):
         if param.mode == "immediate":
             print param
-
-
-def get_parameters(program, index):
-    instruction = str(program[index]).zfill(5)
-    mode = "position"
-    if instruction[2] == "1":
-        mode = "immediate"
-    first = Parameter(program[index+1], mode)
-    mode = "position"
-    if instruction[1] == "1":
-        mode = "immediate"
-    second = Parameter(program[index+2], mode)
-    return first, second
-
-def get_parameter(program, index):
-    instruction = str(program[index]).zfill(5)
-    mode = "position"
-    if instruction[2] == "1":
-        mode = "immediate"
-    return Parameter(program[index + 1], mode)
-
-
-class ParameterAddInstruction(AddInstruction):
-    def get_parameters(self, program, index):
-        return get_parameters(program, index)
-
-
-class ParameterMultiplyInstruction(MultiplyInstruction):
-    def get_parameters(self, program, index):
-        return get_parameters(program, index)
-
-class ParamaterOutputInstruction(OutputInstruction):
-    def get_parameters(self, program, index):
-        return get_parameter(program, index)
-
-
-class ParameterInstruction(Instruction):
-    def operate(self, program, index):
-        instruction = int(str(program[index])[-1])
-        if instruction == Intcode.ADD_OPERATOR:
-            return ParameterAddInstruction().operate(program, index)
-        elif instruction == Intcode.INPUT_OPERATOR:
-            return InputInstruction().operate(program, index)
-        elif instruction == Intcode.OUTPUT_OPERATOR:
-            return ParamaterOutputInstruction().operate(program, index)
-        else:
-            return ParameterMultiplyInstruction().operate(program, index)
 
 
 if __name__ == '__main__':
