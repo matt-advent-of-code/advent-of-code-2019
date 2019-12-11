@@ -35,11 +35,13 @@ class MyTestCase(unittest.TestCase):
     def test_input_mode(self):
         expected = [1, 0, 99]
         initial_state = [3, 0, 99]
+        self.intcode.input = 1
         self.assertEqual(expected, self.intcode.program(initial_state))
 
     def test_output_mode(self):
         inital_state = [4, 0, 99]
         self.intcode.program(inital_state)
+        self.assertEqual([4], self.intcode.output)
 
     def test_parameter_mode(self):
         expected = [1002, 4, 3, 4, 99]

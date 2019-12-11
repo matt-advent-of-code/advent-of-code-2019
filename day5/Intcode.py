@@ -10,7 +10,8 @@ class Intcode:
     EQUAL_OPERATOR = 8
 
     def __init__(self):
-        pass
+        self.input = []
+        self.output = []
 
     def program(self, state):
         result_state = list(state)
@@ -32,9 +33,11 @@ class Intcode:
         if i == Intcode.ADD_OPERATOR:
             return AddInstruction()
         elif i == Intcode.INPUT_OPERATOR:
-            return InputInstruction()
+            input = self.input[0]
+            self.input.pop(0)
+            return InputInstruction(input)
         elif i == Intcode.OUTPUT_OPERATOR:
-            return OutputInstruction()
+            return OutputInstruction(self.output)
         elif i == Intcode.MULTIPLY_OPERATOR:
             return MultiplyInstruction()
         elif i == Intcode.JUMP_IF_TRUE_OPERATOR:
@@ -93,15 +96,19 @@ class MultiplyInstruction(AddInstruction):
         return first * second
 
 class InputInstruction(Instruction):
+    def __init__(self, input):
+        self.input = input
     def operate(self, program, index):
         param = program[index+1]
-        program[param] = 5 # hard coded as one
+        program[param] = self.input # hard coded as one
         return index + 2
 
 class OutputInstruction(Instruction):
+    def __init__(self, output):
+        self.output = output
     def operate(self, program, index):
         param = self.get_parameters(program, index)
-        print self.get_parameter_value(param[0], program)
+        self.output.append(self.get_parameter_value(param[0], program))
         return index + 2
 
     def print_out(self, param, program, index):
